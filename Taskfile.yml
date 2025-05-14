@@ -1,0 +1,58 @@
+# Taskfile.yaml
+version: "3"
+
+tasks:
+  start:
+    desc: "Démarre l'environnement Docker"
+    cmds:
+      - docker-compose up -d --build
+    silent: true
+
+  stop:
+    desc: "Arrête l'environnement Docker"
+    cmds:
+      - docker-compose down
+    silent: true
+
+  restart:
+    desc: "Redémarre l'environnement Docker"
+    cmds:
+      - task stop
+      - task start
+    silent: true
+
+  install:
+    desc: "Installe les dépendances Composer"
+    cmds:
+      - docker-compose exec php composer install
+    silent: true
+
+  update:
+    desc: "Met à jour les dépendances Composer"
+    cmds:
+      - docker-compose exec php composer update
+    silent: true
+
+  clear-cache:
+    desc: "Vide le cache Symfony"
+    cmds:
+      - docker-compose exec php bin/console cache:clear
+    silent: true
+
+  log:
+    desc: "Affiche les logs du conteneur php"
+    cmds:
+      - docker-compose logs -f php
+    silent: true
+
+  symfony:
+    desc: "Exécute une commande Symfony"
+    cmds:
+      - docker-compose exec php bin/console {{.CLI_ARGS}}
+    silent: true
+
+  default:
+    desc: "List des tâches disponibles"
+    cmds:
+      - "task --list"
+    silent: true
